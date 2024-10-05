@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
-import AllProjects from "./pages/AllProjects";
-import AllTasks from "./pages/AllTasks";
+import AllProjects from "../pages/AllProjects";
+import AllTasks from "../pages/AllTasks";
 
 const page = () => {
   return (
