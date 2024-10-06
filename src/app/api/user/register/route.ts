@@ -31,9 +31,9 @@ export async function POST(req: Request) {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const accessToken = generateAccessTokens(username);
+  const accessToken = await generateAccessTokens(username);
 
-  const refreshToken = generateRefreshToken(username);
+  const refreshToken = await generateRefreshToken(username);
 
   try {
     const newUser = await User.create({

@@ -26,7 +26,8 @@ export async function POST(req: Request) {
     if (!isPasswordMatch)
       return new Response("Password does not match", { status: 400 });
 
-    const accessToken = generateAccessTokens(username);
+    const accessToken = await generateAccessTokens(username);
+    console.log("accessToken: ", accessToken);
 
     return new Response(
       JSON.stringify({
