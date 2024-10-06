@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, Document } from "mongoose";
 import { ITask, TaskSchema } from "./task";
 
-export interface IProject extends Document {
+export interface IProject {
   title: string;
   progression: number;
   tasks: ITask[];
@@ -25,9 +25,3 @@ export const ProjectSchema: Schema<IProject> = new Schema(
   },
   { timestamps: true }
 );
-
-const Project =
-  (mongoose.models.Project as mongoose.Model<IProject>) ||
-  model<IProject>("Project", ProjectSchema);
-
-export default Project;

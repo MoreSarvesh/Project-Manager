@@ -1,6 +1,6 @@
 import mongoose, { Schema, model, Document } from "mongoose";
 
-export interface ITask extends Document {
+export interface ITask {
   title: string;
   isCompleted: boolean;
 }
@@ -19,9 +19,3 @@ export const TaskSchema: Schema<ITask> = new Schema(
   },
   { timestamps: true }
 );
-
-const Task =
-  (mongoose.models.Task as mongoose.Model<ITask>) ||
-  model<ITask>("Task", TaskSchema);
-
-export default Task;
