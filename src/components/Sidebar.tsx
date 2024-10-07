@@ -3,7 +3,7 @@ import SplitscreenIcon from "@mui/icons-material/Splitscreen";
 const Sidebar = () => {
   return (
     <div className="w-[22%] flex justify-end items-center">
-      <div className="h-[92%] w-[94%] bg-white rounded-l-3xl p-3 flex flex-col">
+      <div className="h-[100%] w-[94%] bg-white rounded-l-3xl p-3 flex flex-col">
         <h2 className="text-[22px] font-bold text-center mt-7">
           Projects Completed
         </h2>

@@ -3,7 +3,7 @@ import ProjectHeader from "@/components/ProjectHeader";
 import ProjectsSubHeader from "@/components/ProjectsSubHeader";
 import Sidebar from "@/components/Sidebar";
 
-const AllProjects = () => {
+const page = () => {
   return (
     <div className="bg-slate-50 w-full min-h-screen flex">
       <AllProjectsArea />
@@ -22,4 +22,4 @@ const AllProjectsArea = () => {
   );
 };
 
-export default AllProjects;
+export default page;

@@ -2,7 +2,7 @@ import AllTasksSection from "@/components/AllTasksSection";
 import TasksHeader from "@/components/TasksHeader";
 import TasksSubHeader from "@/components/TasksSubHeader";
 
-const AllTasks = () => {
+const page = () => {
   return (
     <div className="bg-slate-50 w-full p-10">
       <TasksHeader />
@@ -12,4 +12,4 @@ const AllTasks = () => {
   );
 };
 
-export default AllTasks;
+export default page;
