@@ -1,3 +1,4 @@
+import dbConnect from "@/dbConnection";
 import { IProject } from "@/models/project";
 import User from "@/models/user";
 import { NextRequest } from "next/server";
@@ -12,6 +13,7 @@ export async function GET(req: NextRequest) {
   let userProjects;
 
   try {
+    dbConnect();
     userProjects = await User.findOne({ username }, "projects");
     console.log("users propjects: ", userProjects);
   } catch (error) {
