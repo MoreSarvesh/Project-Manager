@@ -1,5 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import { usePopupContext } from "@/context/PopupContext";
 
 const ProjectHeader = () => {
   return (
@@ -31,9 +32,13 @@ const SearchBar = () => {
 };
 
 const AddProject = () => {
+  const { setIsOpen } = usePopupContext();
   return (
     <div className="flex justify-center">
-      <button className="bg-orange-600 text-white px-3 pr-3 text-[14px] rounded-md flex gap-1 items-center">
+      <button
+        className="bg-orange-600 text-white px-3 pr-3 text-[14px] rounded-md flex gap-1 items-center"
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
         <AddIcon sx={{ fontSize: "28px" }} className="mt-[2px]" />
         <span>New Project</span>
       </button>

@@ -1,6 +1,11 @@
+"use client";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SplitscreenIcon from "@mui/icons-material/Splitscreen";
+import { useState } from "react";
 const TasksSubHeader = () => {
+  const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false);
+  const [isSortingMenuOpen, setIsSortingMenuOpen] = useState(false);
+
   return (
     <div className="mt-24 flex justify-between items-center">
       <div className="flex items-center gap-3">
@@ -12,12 +17,18 @@ const TasksSubHeader = () => {
         </div>
 
         <ul className="flex flex-col gap-[7px]">
-          <li className="text-[17px] font-semibold flex gap-2 items-center">
-            <div className="text-slate-700 flex gap-2 items-center">
-              <span className="text-lg">All Projects</span>
+          <li
+            className="text-[17px] font-semibold flex gap-2 items-center"
+            onClick={() => setIsProjectMenuOpen((prev) => !prev)}
+          >
+            <div className="text-slate-700 flex gap-2 items-center relative">
+              <span className="text-lg cursor-pointer">All Projects</span>
               <span className="bg-slate-700 text-white text-[14px] p-[2px] px-2 rounded-md">
                 6
               </span>
+              {isProjectMenuOpen && (
+                <DropDown options={["opt1", "opt2", "opt3", "opt4", "opt5"]} />
+              )}
             </div>
             <KeyboardArrowDownIcon className="text-slate-600 text-lg" />
           </li>
@@ -30,7 +41,15 @@ const TasksSubHeader = () => {
           </div>
         </ul>
       </div>
-      <SortByButton />
+      <div
+        className="relative"
+        onClick={() => setIsSortingMenuOpen((prev) => !prev)}
+      >
+        <SortByButton />
+        {isSortingMenuOpen && (
+          <DropDown options={["new", "old", "progression"]} />
+        )}
+      </div>
     </div>
   );
 };
@@ -43,6 +62,22 @@ const SortByButton = () => {
         <span className="text-slate-800">Recent Tasks</span>
         <KeyboardArrowDownIcon sx={{ fontSize: "19px" }} />
       </div>
+    </div>
+  );
+};
+
+const DropDown = ({ options }: { options: string[] }) => {
+  return (
+    <div className="bg-white rounded-sm px-4 py-2 absolute top-10 -right-10 w-full text-center shadow-lg">
+      {options.map((opt, index) => (
+        <div
+          key={opt + index}
+          className="text-slate-400 font-light py-2 hover:text-orange-600 cursor-pointer"
+          onClick={() => console.log("clicke")}
+        >
+          {opt}
+        </div>
+      ))}
     </div>
   );
 };

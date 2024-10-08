@@ -47,6 +47,10 @@ const ProjectsLists = () => {
       <hr className="w-[80%] mx-auto text-slate-100 opacity-50" />
       <ProjectListItem />
       <hr className="w-[80%] mx-auto text-slate-100 opacity-50" />
+      <ProjectListItem />
+      <hr className="w-[80%] mx-auto text-slate-100 opacity-50" />
+      <ProjectListItem />
+      <hr className="w-[80%] mx-auto text-slate-100 opacity-50" />
     </ul>
   );
 };
