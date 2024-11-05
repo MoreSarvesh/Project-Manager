@@ -25,3 +25,43 @@ export async function verifyUserAccessToken(accessToken: string) {
 
   return payload;
 }
+
+export async function verifyUserRefreshToken(refreshToken: string) {
+  const secret = new TextEncoder().encode(process.env.REFRESH_TOKEN_SECRETE);
+
+  const { payload } = await jwtVerify(refreshToken, secret);
+
+  return payload;
+}
+
+export const refreshAccessToken = async () => {
+  let response = await fetch("http://localhost:3000/api/user/refresh");
+
+  if (!response.ok) {
+    console.log("could not get new refresh token");
+    const error = await response.json();
+    throw new Error(JSON.stringify(error?.error));
+  }
+  const data = await response.json();
+  console.log("newAccessToken: ", data.newAccessToken);
+
+  return data.newAccessToken;
+};
+
+export const fetchData: (
+  path: string,
+  token: string,
+  abortSignal: AbortSignal
+) => Promise<Response> = async (
+  path: string,
+  token: string,
+  signal: AbortSignal
+) => {
+  let response = await fetch(`http://localhost:3000/api/${path}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+    signal: signal,
+  });
+
+  return response;
+};
