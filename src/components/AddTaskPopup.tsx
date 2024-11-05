@@ -3,6 +3,7 @@ import Popup from "./PopupContainer";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { usePopupContext } from "@/context/PopupContext";
+import { useDataContext } from "@/context/DataContext";
 
 const AddTask = () => {
   const { setIsAddTaskOpen } = usePopupContext();
@@ -64,6 +65,8 @@ const Header = ({
 };
 
 const ProjectInput = () => {
+  const { data } = useDataContext();
+
   return (
     <div className="flex flex-col gap-2">
       <span className="text-[14px] font-medium text-slate-600">Task Name</span>
@@ -104,9 +107,11 @@ const ProjectInput = () => {
             id="project-name"
             className="p-[10px] text-[13px] w-full rounded-md border outline-none"
           >
-            <option value="HIGH">HIGH</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="LOW">LOW</option>
+            {data.map((project) => (
+              <option key={project.title} value={project.title}>
+                {project.title}
+              </option>
+            ))}
           </select>
         </div>
       </div>

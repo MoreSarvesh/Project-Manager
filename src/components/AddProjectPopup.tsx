@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, FormEvent, SetStateAction } from "react";
 import Popup from "./PopupContainer";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
@@ -6,11 +6,16 @@ import { usePopupContext } from "@/context/PopupContext";
 
 const AddProject = () => {
   const { setIsOpen } = usePopupContext();
+
+  const handelSubmit = async (e: FormEvent) => {};
   return (
     <Popup>
       <div className="w-[48%] z-[80] p-3 left-1/2 top-[47%] -translate-y-1/2 -translate-x-1/2 absolute flex flex-col gap-3 border border-slate-50 bg-white rounded-lg shadow-md">
         <Header handelIsOpen={setIsOpen} />
-        <form className="flex flex-col gap-2 pt-8 px-7 mt-3">
+        <form
+          className="flex flex-col gap-2 pt-8 px-7 mt-3"
+          onSubmit={handelSubmit}
+        >
           <ProjectInput />
           <div className="w-[102%] p-[12px] mt-8 mb-4 flex gap-3 justify-end items-center">
             <button
@@ -25,9 +30,6 @@ const AddProject = () => {
             <button
               type="submit"
               className="bg-orange-600 hover:bg-orange-700 text-white text-[13px] p-2 px-4 rounded-md transition-all"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
             >
               Add Project
             </button>
