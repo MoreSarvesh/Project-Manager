@@ -1,13 +1,21 @@
 "use client";
+import { useUserContext } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const page = () => {
+  const { setUser } = useUserContext();
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
+  const [error, setError] = useState("");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -15,10 +23,29 @@ const page = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle login logic here, e.g., send data to API
-    console.log(formData);
+    try {
+      const res = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        setError(error.error);
+        return;
+      }
+
+      const data = await res.json();
+      console.log(data);
+      setUser(data.accessToken);
+      router.replace("http://localhost:3000/projects");
+    } catch (error) {
+      console.log("Error: ", error);
+      setError(JSON.stringify(error));
+    }
   };
 
   return (
@@ -26,16 +53,16 @@ const page = () => {
       <div className="bg-white p-8 rounded-lg shadow-md w-[400px]">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Input */}
+          {/* username Input */}
           <div>
-            <label htmlFor="email" className="block mb-1 text-gray-600">
-              Email
+            <label htmlFor="username" className="block mb-1 text-gray-600">
+              username
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
@@ -66,6 +93,9 @@ const page = () => {
             Log In
           </button>
         </form>
+        {error.length > 1 && (
+          <div className="font-bold text-sm text-red-600">{error}</div>
+        )}
 
         {/* Forgot Password and Sign Up Links */}
         <div className="mt-4 text-center">
