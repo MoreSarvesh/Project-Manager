@@ -4,15 +4,25 @@ import CircleIcon from "@mui/icons-material/Circle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useState } from "react";
 import { usePopupContext } from "@/context/PopupContext";
+import { IProject } from "@/models/project";
+import { ITask } from "@/models/task";
+import AddIcon from "@mui/icons-material/Add";
+import AddTask from "./AddTaskPopup";
 
-const ProjectCard = () => {
+const ProjectCard = ({ project }: { project: IProject }) => {
   const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false);
+  const { isAddTaskOpen } = usePopupContext();
 
   return (
-    <li className="w-[300px] flex flex-col gap-8 rounded-lg p-7 bg-white relative">
-      <ProjectCardHeader handleMenu={setIsProjectMenuOpen} />
-      <ProjectCardBody />
-      <ProjectCardFooter />
+    <li className="w-[300px] h-[270px] flex flex-col justify-between rounded-lg p-7 bg-white relative">
+      <ProjectCardHeader
+        handleMenu={setIsProjectMenuOpen}
+        title={project.title}
+        date="2 days ago"
+      />
+      <ProjectCardBody tasks={project.tasks.slice(0, 2)} />
+      <ProjectCardFooter progression={project.progression} />
+      {isAddTaskOpen && <AddTask />}
       {isProjectMenuOpen && (
         <Menu
           handleMenu={setIsProjectMenuOpen}
@@ -54,8 +64,12 @@ const Menu = ({
 
 const ProjectCardHeader = ({
   handleMenu,
+  title,
+  date,
 }: {
   handleMenu: (val: (prev: any) => boolean) => void;
+  title: string;
+  date: string;
 }) => {
   return (
     <div className="flex justify-between items-center">
@@ -64,8 +78,8 @@ const ProjectCardHeader = ({
           <SplitscreenIcon sx={{ fontSize: "19px" }} className="text-white" />
         </div>
         <div className="flex flex-col">
-          <span className="font-semibold text-[19px]">Project Title</span>
-          <span className="text-slate-400 text-[13px]">2 days ago</span>
+          <span className="font-semibold text-[19px]">{title}</span>
+          <span className="text-slate-400 text-[13px]">{date}</span>
         </div>
       </div>
 
@@ -80,19 +94,35 @@ const ProjectCardHeader = ({
     </div>
   );
 };
-const ProjectCardBody = () => {
+const ProjectCardBody = ({ tasks }: { tasks: ITask[] }) => {
+  const { setIsAddTaskOpen } = usePopupContext();
   return (
     <ul className="text-slate-400 text-[13px] flex flex-col gap-3 ml-3">
-      <li className="flex gap-2 items-center">
-        <CircleIcon className="text-[8px]" />
-        <span>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis ut{" "}
-        </span>
-      </li>
+      {tasks.length > 0 ? (
+        tasks.map((task, i) => (
+          <li className="flex gap-2 items-center" key={i}>
+            <CircleIcon className="text-[8px]" />
+            <span>{task.title}</span>
+          </li>
+        ))
+      ) : (
+        <li className="flex gap-2 items-center justify-center h-[51px]">
+          <button
+            className="bg-slate-600 text-white px-3 pr-3 text-[16px] rounded-md flex gap-1 items-center"
+            onClick={() => {
+              setIsAddTaskOpen(true);
+              console.log("clicked");
+            }}
+          >
+            <AddIcon sx={{ fontSize: "28px" }} className="mt-[2px]" />
+            <span>Add Task</span>
+          </button>
+        </li>
+      )}
     </ul>
   );
 };
-const ProjectCardFooter = () => {
+const ProjectCardFooter = ({ progression }: { progression: number }) => {
   return (
     <div className="flex flex-col gap-4 mt-2">
       <div className="text-[12px] flex w-full gap-3 items-center">
@@ -103,7 +133,7 @@ const ProjectCardFooter = () => {
       <div className="flex justify-between">
         <p className="text-[13px] text-slate-400">On Progress</p>
         <div className="flex gap-1 text-[13px]">
-          <p>78%</p>{" "}
+          <p>{`${progression}%`}</p>{" "}
         </div>
       </div>
     </div>

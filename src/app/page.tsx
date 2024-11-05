@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const page = () => {
   return (
@@ -13,10 +14,10 @@ const page = () => {
         </div>
         <div className="flex gap-4">
           <button className="bg-transparent border border-orange-600 px-4 py-2 rounded hover:bg-white hover:text-orange-300 transition">
-            Sign In
+            <Link href="http://localhost:3000/login">Sign In</Link>
           </button>
           <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-500 transition">
-            Sign Up
+            <Link href="http://localhost:3000/register">Sign Up</Link>
           </button>
         </div>
       </header>

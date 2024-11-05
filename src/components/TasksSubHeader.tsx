@@ -1,10 +1,33 @@
 "use client";
+import { listItemDataType } from "@/app/projects/tasks/page";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SplitscreenIcon from "@mui/icons-material/Splitscreen";
-import { useState } from "react";
-const TasksSubHeader = () => {
+import { useEffect, useState } from "react";
+
+const TasksSubHeader = ({
+  tasks,
+  taskListFilter,
+  handelTaskListFilter,
+}: {
+  tasks: listItemDataType[];
+  taskListFilter: string;
+  handelTaskListFilter: (arg: string) => void;
+}) => {
   const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false);
   const [isSortingMenuOpen, setIsSortingMenuOpen] = useState(false);
+  const [projectList, setProjectList] = useState(["All Projects"]);
+
+  useEffect(() => {
+    const projects: string[] = ["All Projects"];
+
+    for (let i = 0; i < tasks.length; i++) {
+      if (projects.indexOf(tasks[i].project) === -1) {
+        projects.push(tasks[i].project);
+      }
+      //console.log("temp: ", projects);
+      setProjectList(projects);
+    }
+  }, [tasks]);
 
   return (
     <div className="mt-24 flex justify-between items-center">
@@ -22,12 +45,15 @@ const TasksSubHeader = () => {
             onClick={() => setIsProjectMenuOpen((prev) => !prev)}
           >
             <div className="text-slate-700 flex gap-2 items-center relative">
-              <span className="text-lg cursor-pointer">All Projects</span>
+              <span className="text-lg cursor-pointer">{taskListFilter}</span>
               <span className="bg-slate-700 text-white text-[14px] p-[2px] px-2 rounded-md">
-                6
+                {projectList.length}
               </span>
               {isProjectMenuOpen && (
-                <DropDown options={["opt1", "opt2", "opt3", "opt4", "opt5"]} />
+                <DropDown
+                  options={projectList.map((project) => project)}
+                  handelFilter={handelTaskListFilter}
+                />
               )}
             </div>
             <KeyboardArrowDownIcon className="text-slate-600 text-lg" />
@@ -47,7 +73,10 @@ const TasksSubHeader = () => {
       >
         <SortByButton />
         {isSortingMenuOpen && (
-          <DropDown options={["new", "old", "progression"]} />
+          <DropDown
+            options={["new", "old", "progression"]}
+            handelFilter={() => {}}
+          />
         )}
       </div>
     </div>
@@ -66,14 +95,20 @@ const SortByButton = () => {
   );
 };
 
-const DropDown = ({ options }: { options: string[] }) => {
+const DropDown = ({
+  options,
+  handelFilter,
+}: {
+  options: string[];
+  handelFilter: (arg: string) => void;
+}) => {
   return (
     <div className="bg-white rounded-sm px-4 py-2 absolute top-10 -right-10 w-full text-center shadow-lg">
       {options.map((opt, index) => (
         <div
           key={opt + index}
           className="text-slate-400 font-light py-2 hover:text-orange-600 cursor-pointer"
-          onClick={() => console.log("clicke")}
+          onClick={() => handelFilter(opt)}
         >
           {opt}
         </div>

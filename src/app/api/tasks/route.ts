@@ -3,6 +3,11 @@ import { ITask } from "@/models/task";
 import User from "@/models/user";
 import { NextRequest } from "next/server";
 
+export type TaskDataType = {
+  task: ITask;
+  project: string;
+};
+
 export async function GET(req: NextRequest) {
   const username = req.headers.get("username");
   if (!username)
@@ -18,13 +23,20 @@ export async function GET(req: NextRequest) {
         status: 500,
       });
 
-    let allTask = [] as ITask[];
+    let allTask = [] as TaskDataType[];
 
     for (let i = 0; i < user.projects.length; i++) {
-      allTask = [...allTask, ...user.projects[i].tasks];
+      for (let j = 0; j < user.projects[i].tasks.length; j++) {
+        let newTask: TaskDataType = {
+          task: user.projects[i].tasks[j],
+          project: user.projects[i].title,
+        };
+
+        allTask.push(newTask);
+      }
     }
 
-    return Response.json({ data: { tasks: allTask }, msg: "ok" });
+    return Response.json({ data: allTask, msg: "ok" });
   } catch (error) {
     console.log("Error: ", error);
     return new Response(JSON.stringify({ error: "Server Error" }), {
