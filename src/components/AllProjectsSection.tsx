@@ -1,9 +1,49 @@
 "use client";
+import { fetchData, refreshAccessToken } from "@/app/utils/helper";
 import ProjectCard from "./ProjectCard";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useDataContext } from "@/context/DataContext";
+import { useUserContext } from "@/context/UserContext";
 
 const AllProjectsSection = () => {
-  const { data } = useDataContext();
+  const { data, setData } = useDataContext();
+  const { user, setUser } = useUserContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      const signal = controller.signal;
+      try {
+        let resposne = await fetchData("projects", user, signal);
+
+        if (resposne.status === 401) {
+          const newAccessToken = await refreshAccessToken();
+          setUser(newAccessToken);
+
+          resposne = await fetchData("projects", newAccessToken, signal);
+        }
+
+        if (!resposne.ok) {
+          const error = await resposne.json();
+          throw new Error(JSON.stringify(error));
+        }
+
+        const data = await resposne.json();
+        //console.log("Data: ", data);
+
+        setData(data.data.projects.projects);
+      } catch (error) {
+        router.replace("http://localhost:3000/login");
+        console.log("canceling request");
+        controller.abort();
+      }
+    })();
+
+    return () => {};
+  }, []);
+
   return (
     <ul className="h-[78%] overflow-auto flex gap-4 flex-wrap mt-6">
       {data.map((project) => (
