@@ -7,6 +7,15 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   console.log("pathmname: ", pathname);
 
+  if (pathname.startsWith("/projects")) {
+    const cookie = req.cookies.get("refreshtoken");
+
+    if (!cookie) return NextResponse.redirect("http://localhost:3000/login");
+
+    console.log("cookie: ", cookie);
+    return NextResponse.next();
+  }
+
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
