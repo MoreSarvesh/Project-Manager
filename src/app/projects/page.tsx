@@ -4,6 +4,13 @@ import ProjectHeader from "@/components/ProjectHeader";
 import ProjectPopups from "@/components/ProjectPopups";
 import ProjectsSubHeader from "@/components/ProjectsSubHeader";
 import Sidebar from "@/components/Sidebar";
+import { useState } from "react";
+
+export enum ProjectListFilters {
+  newest = "newest",
+  oldest = "oldest",
+  completed = "completed",
+}
 
 const page = () => {
   return (
@@ -15,11 +22,18 @@ const page = () => {
 };
 
 const AllProjectsArea = () => {
+  const [projectListFilter, setProjectListFilter] = useState(
+    ProjectListFilters.newest
+  );
+
   return (
     <>
       <div className="w-[78%] p-10 flex flex-col gap-3">
         <ProjectHeader />
-        <ProjectsSubHeader />
+        <ProjectsSubHeader
+          projectListFilter={projectListFilter}
+          handelProjectListFilter={setProjectListFilter}
+        />
         <AllProjectsSection />
       </div>
       <ProjectPopups />

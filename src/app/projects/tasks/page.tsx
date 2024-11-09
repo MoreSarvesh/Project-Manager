@@ -2,13 +2,12 @@
 import { fetchData, refreshAccessToken } from "@/app/utils/helper";
 import AddTask from "@/components/AddTaskPopup";
 import AllTasksSection from "@/components/AllTasksSection";
-import DeleteProject from "@/components/DeleteProjectPopup";
 import TasksHeader from "@/components/TasksHeader";
 import TasksSubHeader from "@/components/TasksSubHeader";
-import { useDataContext } from "@/context/DataContext";
 import { usePopupContext } from "@/context/PopupContext";
 import { useUserContext } from "@/context/UserContext";
 import { ITask } from "@/models/task";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export type listItemDataType = {
@@ -16,33 +15,40 @@ export type listItemDataType = {
   task: ITask;
 };
 const page = () => {
+  const router = useRouter();
+
   const { isAddTaskOpen } = usePopupContext();
   const { user, setUser } = useUserContext();
   const [tasks, setTasks] = useState([] as listItemDataType[]);
   const [taskListFilter, setTaskListFilter] = useState("All Projects");
 
   useEffect(() => {
+    const controller = new AbortController();
     (async () => {
+      const signal = controller.signal;
       try {
-        let resposne = await fetchData("tasks", user);
+        let resposne = await fetchData("tasks", user, signal);
 
         if (resposne.status === 401) {
           const newAccessToken = await refreshAccessToken();
           setUser(newAccessToken);
 
-          resposne = await fetchData("tasks", newAccessToken);
+          resposne = await fetchData("tasks", newAccessToken, signal);
         }
 
         if (!resposne.ok) {
-          const error = await resposne.json();
-          throw new Error(JSON.stringify(error));
+          router.replace("http://localhost:3000/login");
+          console.log("canceling request");
+          controller.abort();
         }
 
         const data = await resposne.json();
-        console.log("Data: ", data.data);
+        //console.log("Data: ", data.data);
 
         setTasks(data.data);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     })();
   }, []);
 

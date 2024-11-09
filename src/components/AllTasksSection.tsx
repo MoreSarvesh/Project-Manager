@@ -4,9 +4,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CheckBoxIcon from "@mui/material/Checkbox";
 import CachedIcon from "@mui/icons-material/Cached";
-import { useEffect, useState } from "react";
-import { useDataContext } from "@/context/DataContext";
-import { ITask } from "@/models/task";
+import { useState } from "react";
 import { listItemDataType } from "@/app/projects/tasks/page";
 
 export enum TaskFilter {
@@ -24,7 +22,6 @@ const AllTasksSection = ({
   const [taskStatusFilter, setTaskStatusFilter] = useState(
     TaskFilter.inProgress
   );
-  const { data } = useDataContext();
 
   //console.log("filter: ", filter);
 

@@ -3,6 +3,7 @@ import { listItemDataType } from "@/app/projects/tasks/page";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SplitscreenIcon from "@mui/icons-material/Splitscreen";
 import { useEffect, useState } from "react";
+import DropDown from "./DropDown";
 
 const TasksSubHeader = ({
   tasks,
@@ -95,7 +96,7 @@ const SortByButton = () => {
   );
 };
 
-const DropDown = ({
+/* const DropDown = ({
   options,
   handelFilter,
 }: {
@@ -115,6 +116,6 @@ const DropDown = ({
       ))}
     </div>
   );
-};
+}; */
 
 export default TasksSubHeader;

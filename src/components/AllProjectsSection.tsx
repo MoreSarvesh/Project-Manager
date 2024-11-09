@@ -26,8 +26,9 @@ const AllProjectsSection = () => {
         }
 
         if (!resposne.ok) {
-          const error = await resposne.json();
-          throw new Error(JSON.stringify(error));
+          router.replace("http://localhost:3000/login");
+          console.log("canceling request");
+          controller.abort();
         }
 
         const data = await resposne.json();
@@ -35,13 +36,9 @@ const AllProjectsSection = () => {
 
         setData(data.data.projects.projects);
       } catch (error) {
-        router.replace("http://localhost:3000/login");
-        console.log("canceling request");
-        controller.abort();
+        console.log(error);
       }
     })();
-
-    return () => {};
   }, []);
 
   return (
