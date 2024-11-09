@@ -48,19 +48,22 @@ export const refreshAccessToken = async () => {
   return data.newAccessToken;
 };
 
-export const fetchData: (
-  path: string,
-  token: string,
-  abortSignal: AbortSignal
-) => Promise<Response> = async (
-  path: string,
-  token: string,
-  signal: AbortSignal
-) => {
+export const fetchData = async (path: string, token: string) => {
   let response = await fetch(`http://localhost:3000/api/${path}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
-    signal: signal,
+  });
+
+  return response;
+};
+
+export const addProject = async (projectTitle: string, token: string) => {
+  let response = await fetch("http://localhost:3000/api/projects", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title: projectTitle }),
   });
 
   return response;

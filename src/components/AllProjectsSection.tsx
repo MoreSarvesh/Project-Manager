@@ -12,23 +12,19 @@ const AllProjectsSection = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const controller = new AbortController();
     (async () => {
-      const signal = controller.signal;
       try {
-        let resposne = await fetchData("projects", user, signal);
+        let resposne = await fetchData("projects", user);
 
         if (resposne.status === 401) {
           const newAccessToken = await refreshAccessToken();
           setUser(newAccessToken);
 
-          resposne = await fetchData("projects", newAccessToken, signal);
+          resposne = await fetchData("projects", newAccessToken);
         }
 
         if (!resposne.ok) {
           router.replace("http://localhost:3000/login");
-          console.log("canceling request");
-          controller.abort();
         }
 
         const data = await resposne.json();
@@ -36,14 +32,14 @@ const AllProjectsSection = () => {
 
         setData(data.data.projects.projects);
       } catch (error) {
-        console.log(error);
+        console.log("Error: ", error);
       }
     })();
   }, []);
 
   return (
     <ul className="h-[78%] overflow-auto flex gap-4 flex-wrap mt-6">
-      {data.map((project) => (
+      {data?.map((project) => (
         <ProjectCard key={project.title} project={project} />
       ))}
     </ul>

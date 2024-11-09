@@ -23,23 +23,19 @@ const page = () => {
   const [taskListFilter, setTaskListFilter] = useState("All Projects");
 
   useEffect(() => {
-    const controller = new AbortController();
     (async () => {
-      const signal = controller.signal;
       try {
-        let resposne = await fetchData("tasks", user, signal);
+        let resposne = await fetchData("tasks", user);
 
         if (resposne.status === 401) {
           const newAccessToken = await refreshAccessToken();
           setUser(newAccessToken);
 
-          resposne = await fetchData("tasks", newAccessToken, signal);
+          resposne = await fetchData("tasks", newAccessToken);
         }
 
         if (!resposne.ok) {
           router.replace("http://localhost:3000/login");
-          console.log("canceling request");
-          controller.abort();
         }
 
         const data = await resposne.json();
